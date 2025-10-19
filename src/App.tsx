@@ -1,35 +1,30 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+// src/App.tsx
+import { useState } from 'react'; // Importe useState
+import ListaUsuarios from './components/ListaUsuarios';
+import FormularioCadastroUsuario from './components/FormularioCadastroUsuario';
+import './App.css';
 
 function App() {
-  const [count, setCount] = useState(0)
+  // 1. Crie um estado para forçar a recarga
+  const [reloadKey, setReloadKey] = useState(0); 
+  
+  // 2. Crie a função que será passada para o formulário
+  const handleUserAdded = () => {
+    // Incrementa a chave para forçar a ListaUsuarios a recarregar
+    setReloadKey(prevKey => prevKey + 1);
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <div className="App">
+      {/* 3. Passe a função de callback para o FormularioCadastroUsuario */}
+      <FormularioCadastroUsuario onUserAdded={handleUserAdded} /> 
+      
+      <hr style={{ margin: '30px 0' }} />
+      
+      {/* 4. Passe a chave de recarga para a ListaUsuarios */}
+      <ListaUsuarios reloadFlag = {reloadKey} /> 
+    </div>
+  );
 }
 
-export default App
+export default App;
