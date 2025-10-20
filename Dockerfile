@@ -11,10 +11,10 @@ RUN npm install
 # Copia o código-fonte
 COPY . .
 
-# Constrói o site React (Vite), definindo a variável de ambiente VITE_APP_BASE_URL 
-# para informar ao Vite que o site será servido a partir de /financeiro/
-# NOTE: Você deve garantir que seu router (ex: BrowserRouter) use essa base.
-RUN VITE_APP_BASE_URL="/financeiro/" npm run build
+# Constrói o site React (Vite), definindo a variável de ambiente VITE_APP_BASE_URL
+# CORREÇÃO DEFINITIVA: Usamos 'npx vite build' para garantir que o executável seja encontrado
+# e adicionamos --emptyOutDir para garantir um build limpo.
+RUN npx vite build --base=/financeiro/ --emptyOutDir
 
 # Estágio 2: Servidor Nginx (Runtime Final)
 FROM nginx:alpine AS final
