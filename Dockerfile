@@ -11,8 +11,10 @@ RUN npm install
 # Copia o código-fonte
 COPY . .
 
-# Constrói o site React (Vite)
-RUN npm run build
+# Constrói o site React (Vite), definindo a variável de ambiente VITE_APP_BASE_URL 
+# para informar ao Vite que o site será servido a partir de /financeiro/
+# NOTE: Você deve garantir que seu router (ex: BrowserRouter) use essa base.
+RUN VITE_APP_BASE_URL="/financeiro/" npm run build
 
 # Estágio 2: Servidor Nginx (Runtime Final)
 FROM nginx:alpine AS final
@@ -23,7 +25,7 @@ RUN rm /etc/nginx/conf.d/default.conf
 COPY nginx/nginx.conf /etc/nginx/conf.d/default.conf
 
 # Copia os arquivos de build (a pasta 'dist') do estágio de build
-COPY --from=build /app/dist /usr/share/nginx/html
+COPY --from=build /app/dist /usr/share/nginx/html/financeiro
 
 # Expor a porta 80, que será mapeada no docker-compose
 EXPOSE 80
